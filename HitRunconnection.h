@@ -9,6 +9,8 @@ class HitRunconnection
 	bool live;
     motorControl *motors;
     HANDLE hIOMutex;
+    float64 motorReference[MUSCLE_NUM];
+    float64 forceOut[MUSCLE_NUM+6];
     static void HitRunconnectionControlLoop(void*);
     void controlLoop();
     void update();
@@ -17,6 +19,8 @@ public:
     ~HitRunconnection(void);
     void startConnection();
     int establishConnection();
+    float64 * HitRunconnection::getVector();
+    int HitRunconnection::sendVector()
     
 };
 #endif
