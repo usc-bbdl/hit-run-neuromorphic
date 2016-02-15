@@ -190,7 +190,8 @@ void motorControl::controlLoop(void)
 			if (motorCommand[i] < motorMinVoltage)
 				motorCommand[i] = motorMinVoltage;
 		}
-        printf("Load Cell: %+6.2f; Force Command: %+6.2f \r",loadCellData[0],motorRef[0]);
+        //printf("Load Cell: %+6.2f; Force Command: %+6.2f \r",loadCellData[0],motorRef[0]);
+        printf("Fr Cmd1: %+6.2f, Fr Cmd2: %+6.2f, Fr Cmd3: %+6.2f \r",motorRef[0],motorRef[1],motorRef[2]);
         ReleaseMutex( hIOMutex);
         sprintf(dataSample,"%.3f,%d",tock,newCommand);
 		for(int i = 0;i<MUSCLE_NUM;i++)

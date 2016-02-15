@@ -8,7 +8,7 @@
 #define DAQmxErrChk(functionCall) if( DAQmxFailed(error=(functionCall)) ) goto Error; else
 
 const int controlFreq = 100;
-const double loadCellScale[13] = {(1/sqrt(2.0)) * 6.1463,(1/sqrt(2.0)) * 5.9382,(1/sqrt(2.0)) * 6,(1/sqrt(2.0)) * 6,(1/sqrt(2.0)) * 6,(1/sqrt(2.0)) * 6,(1/sqrt(2.0)) * 6, 1, 1 , 1 , 1, 1, 1}; //From calibration test with weights
+const double loadCellScale[13] = {(1/sqrt(2.0)) * 6.1463,(1/sqrt(2.0)) * 5.9382,(1/sqrt(2.0)) * 13.58,(1/sqrt(2.0)) * 13.91,(1/sqrt(2.0)) * 10.85,(1/sqrt(2.0)) * 10.22,(1/sqrt(2.0)) * 12.23, 1, 1 , 1 , 1, 1, 1}; //From calibration test with weights
 const int motorMinVoltage = 0;
 const int motorMaxVoltage = 7;
 const int loadCellMinVoltage = -10;

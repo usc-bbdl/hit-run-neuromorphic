@@ -3,7 +3,7 @@
 #include <NIDAQmx.h>
 #include <random>
 #include <motorControl.h>
-
+#include <math.h>
 HitRunconnection::HitRunconnection(motorControl *temp)
 {
 	motors = temp;
@@ -34,16 +34,17 @@ void HitRunconnection::update() { //This is the function called in the thread
 	loadCellData = motors->loadCellData;
 	//Pass loadCellData to Hit&Run
 	//Recieve motorRef from Hit&Run
-	std::default_random_engine generator;
-	std::normal_distribution<double> distribution(10,1.0);
+	//std::default_random_engine generator;
+	//std::normal_distribution<double> distribution(10,1.0);
+    static int t = 0;
 	for (int i = 0; i<MUSCLE_NUM;i++){
-		motorReference[i] = distribution(generator);
+		motorReference[i] = 4*(1+cos(2*3.14*0.02*t));
 	}
 	//these are replaced by random numbers here
     motors->updateMotorRef(motorReference);
 	motors->newCommand = 1;
 	Sleep(1000);
-
+    t++;
 }
 int HitRunconnection::establishConnection() {
 	//Check if we can establish a connection to Hit&Run
