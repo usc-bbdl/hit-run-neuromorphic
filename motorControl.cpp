@@ -208,6 +208,9 @@ void motorControl::controlLoop(void)
     }
     for (int i=0;i<MUSCLE_NUM;i++)
         motorCommand[i] = 0;
+    DAQmxErrChk (DAQmxWriteAnalogF64(motorTaskHandle,1,FALSE,10,DAQmx_Val_GroupByChannel,motorCommand,NULL,NULL));
+    DAQmxStopTask(motorTaskHandle);
+    DAQmxStopTask(motorEnableHandle);
     isControlling = FALSE;
     fclose(dataFile);
 Error:
@@ -230,7 +233,7 @@ Error:
 void motorControl::updateMotorRef(float64 *a){
     for (int i =0;i<MUSCLE_NUM;i++)
     {
-        motorRef[i] = a[i];
+        motorRef[i] = (10*a[i])+1;
     }
 }
 
@@ -288,6 +291,7 @@ Error:
 		printf("DisableMotor Error: %s\n",errBuff);
         DAQmxGetExtendedErrorInfo(errBuff,2048);
         printf("DAQmx Error: %s\n",errBuff);
+        printf("Motor Disable Error\n");
 		DAQmxStopTask(motorEnableHandle);
         DAQmxStopTask(motorTaskHandle);
 

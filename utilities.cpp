@@ -45,7 +45,7 @@ int proceedState(int *state)
         Sleep(1000);
         printf("Running the Experiment.\n");
 		printf("Next Stage is to Shut Down.\n");
-        *state = MOTOR_STATE_CLOSED_LOOP;
+        *state = MOTOR_STATE_SHUTTING_DOWN;
         break;
     case MOTOR_STATE_SHUTTING_DOWN:
         printf("Shutting Down\n");
