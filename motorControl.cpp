@@ -190,7 +190,8 @@ void motorControl::controlLoop(void)
 			if (motorCommand[i] < motorMinVoltage)
 				motorCommand[i] = motorMinVoltage;
 		}
-        printf("Load Cell: %+6.2f; Force Command: %+6.2f \r",loadCellData[0],motorRef[0]);
+        //printf("Load Cell: %+6.2f; Force Command: %+6.2f \r",loadCellData[0],motorRef[0]);
+        printf("Fr Cmd1: %+6.2f, Fr Cmd2: %+6.2f, Fr Cmd3: %+6.2f \r",motorRef[0],motorRef[1],motorRef[2]);
         ReleaseMutex( hIOMutex);
         sprintf(dataSample,"%.3f,%d",tock,newCommand);
 		for(int i = 0;i<MUSCLE_NUM;i++)
@@ -207,6 +208,9 @@ void motorControl::controlLoop(void)
     }
     for (int i=0;i<MUSCLE_NUM;i++)
         motorCommand[i] = 0;
+    DAQmxErrChk (DAQmxWriteAnalogF64(motorTaskHandle,1,FALSE,10,DAQmx_Val_GroupByChannel,motorCommand,NULL,NULL));
+    DAQmxStopTask(motorTaskHandle);
+    DAQmxStopTask(motorEnableHandle);
     isControlling = FALSE;
     fclose(dataFile);
 Error:
@@ -229,7 +233,7 @@ Error:
 void motorControl::updateMotorRef(float64 *a){
     for (int i =0;i<MUSCLE_NUM;i++)
     {
-        motorRef[i] = a[i];
+        motorRef[i] = (10*a[i])+1;
     }
 }
 
@@ -287,6 +291,7 @@ Error:
 		printf("DisableMotor Error: %s\n",errBuff);
         DAQmxGetExtendedErrorInfo(errBuff,2048);
         printf("DAQmx Error: %s\n",errBuff);
+        printf("Motor Disable Error\n");
 		DAQmxStopTask(motorEnableHandle);
         DAQmxStopTask(motorTaskHandle);
 

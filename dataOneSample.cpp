@@ -34,6 +34,7 @@ Error:
 		// DAQmx Stop Code
 		/*********************************************/
 		printf("DAQmx Error: %s\n",errBuff);
+        printf("Data one Sample Error: %s\n",errBuff);
 	}
     if (loadCelltaskHandle)
     {
