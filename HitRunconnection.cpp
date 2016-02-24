@@ -23,8 +23,8 @@ HitRunconnection::HitRunconnection(motorControl *temp)
     trialIndex = 0;
     //end File IO
 
-    gain = 10;
-    bias = 1;
+    gain = 8;
+    bias = 2;
 
 }
 HitRunconnection::~HitRunconnection() {

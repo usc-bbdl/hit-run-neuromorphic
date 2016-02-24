@@ -1,25 +1,39 @@
 #include "motorControl.h"
 #include <utilities.h>
 #include <stdio.h>
-motorControl::motorControl(double *loadCellOffset)
+motorControl::motorControl(double *param)
 {
     I = 3;
     char        errBuff[2048]={'\0'};
     int32       error=0;
-    
+    loadCellOffset[0] = param[0];
+    loadCellOffset[1] = param[1];
+    loadCellOffset[2] = param[2];
+    loadCellOffset[3] = param[3];
+    loadCellOffset[4] = param[4];
+    loadCellOffset[5] = param[5];
+    loadCellOffset[6] = param[6];
+    loadCellOffset[7] = param[7];
+    loadCellOffset[8] = param[8];
+    loadCellOffset[9] = param[9];
+    loadCellOffset[10] = param[10];
+    loadCellOffset[11] = param[11];
+    loadCellOffset[12] = param[12];
+
     isEnable = FALSE;
     isWindUp = FALSE;
     isControlling = FALSE;
     live = FALSE;
 	for(int i=0;i<MUSCLE_NUM;i++)
-		motorRef[i] = 5;
+		motorRef[i] = 2;
 	char subHeader[100]="";
-    strcpy(header,"Time, New Command ");
-	for (int i=0; i<MUSCLE_NUM; i++) {
+    //strcpy(header,"Time, New Command, ");
+    strcpy(header,"Time, New Command, Measured EIP, Command EIP, Measured DI, Command DI, Measured EDC, Command EDC, Measured PI, Command PI, Measured LUM, Command LUM, Measured FDS, Command FDS, Measured FDP, Command FDP");
+	/*for (int i=0; i<MUSCLE_NUM; i++) {
 		sprintf(subHeader,", Measured Force %d, Force Command %d",i,i);
 		strcat (header, subHeader);
-	}
-	strcat (header, ", Force x, Force y, Force z, Tau 1, Tau 2, Tau3\n");
+	}*/
+	strcat (header, ", Force y, Mx, Force x, M z, M y, Force z\n");
 
     DAQmxErrChk (DAQmxCreateTask("",&loadCelltaskHandle));
     DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai1","loadCell1",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
@@ -29,12 +43,12 @@ motorControl::motorControl(double *loadCellOffset)
 	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai4","loadCell5",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
     DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai5","loadCell6",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
 	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai6","loadCell7",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
-	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai7","JR3-FX",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
-    DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai8","JR3-FY",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
-	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai9","JR3-FZ",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
-    DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai10","JR3-Tau1",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
-	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai11","JR3-Tau2",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
-	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai12","JR3-Tau3",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
+    DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai7","JR3-FY",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
+    DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai8","JR3-MX",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
+	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai9","JR3-FX",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
+    DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai10","JR3-MZ",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
+	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai11","JR3-MY",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
+	DAQmxErrChk (DAQmxCreateAIVoltageChan(loadCelltaskHandle,"PXI1Slot5/ai12","JR3-FZ",DAQmx_Val_RSE,loadCellMinVoltage,loadCellMaxVoltage,DAQmx_Val_Volts,NULL));
 	
 
 	DAQmxErrChk (DAQmxCfgSampClkTiming(loadCelltaskHandle,"",controlFreq,DAQmx_Val_Rising,DAQmx_Val_HWTimedSinglePoint,NULL));
@@ -190,6 +204,12 @@ void motorControl::controlLoop(void)
 			if (motorCommand[i] < motorMinVoltage)
 				motorCommand[i] = motorMinVoltage;
 		}
+        loadCellData[7] = (loadCellData[7] * loadCellScale[7]) - loadCellOffset[7];
+        loadCellData[8] = (loadCellData[8] * loadCellScale[8]) - loadCellOffset[8];
+        loadCellData[9] = (loadCellData[9] * loadCellScale[9]) - loadCellOffset[9];
+        loadCellData[10] = (loadCellData[10] * loadCellScale[10]) - loadCellOffset[10];
+        loadCellData[11] = (loadCellData[11] * loadCellScale[11]) - loadCellOffset[11];
+        loadCellData[12] = (loadCellData[12] * loadCellScale[12]) - loadCellOffset[12];
         //printf("Load Cell: %+6.2f; Force Command: %+6.2f \r",loadCellData[0],motorRef[0]);
         printf("Fr Cmd1: %+6.2f, Fr Cmd2: %+6.2f, Fr Cmd3: %+6.2f \r",motorRef[0],motorRef[1],motorRef[2]);
         ReleaseMutex( hIOMutex);
@@ -233,7 +253,7 @@ Error:
 void motorControl::updateMotorRef(float64 *a){
     for (int i =0;i<MUSCLE_NUM;i++)
     {
-        motorRef[i] = (10*a[i])+1;
+        motorRef[i] = (8*a[i])+2;
     }
 }
 
