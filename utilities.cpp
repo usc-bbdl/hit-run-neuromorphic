@@ -3,17 +3,27 @@
 #include <dataOneSample.h>
 #include <motorControl.h>
 #include <HitRunconnection.h>
+#include <hardwareConfiguration.h>
 
 int proceedState(int *state)
 {
-    static dataOneSample loadCellOffsets;
-    static motorControl motors(loadCellOffsets.loadCellOffset);
-	static HitRunconnection h_r_Con(& motors);
+    
+    
+	
+    static hardwareConfiguration hardware;
     static int connectionPass;
+    static dataOneSample loadCellOffsets(& hardware);
+    static motorControl motors(loadCellOffsets.loadCellOffset);
+    static HitRunconnection h_r_Con(& motors);
+
     switch(*state)
     {
     case MOTOR_STATE_INIT:
         printf("Motors Winding Up; Next stage is Closed-Loop\n");
+        int hardwareConfigLoad;
+        hardwareConfigLoad = hardware.loadChannels();
+        if (hardwareConfigLoad == 0)
+            *state = MOTOR_STATE_SHUTTING_DOWN;
         motors.motorEnable();
         motors.motorWindUp();
         *state = MOTOR_STATE_WINDING_UP;

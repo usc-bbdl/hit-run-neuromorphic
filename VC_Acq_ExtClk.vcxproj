@@ -21,16 +21,22 @@
   <ItemGroup>
     <ClCompile Include="dataOneSample.cpp" />
     <ClCompile Include="experimentUserInterface.cpp" />
+    <ClCompile Include="hardwareConfiguration.cpp" />
     <ClCompile Include="HitRunconnection.cpp" />
+    <ClCompile Include="ipc.cpp" />
     <ClCompile Include="motorControl.cpp" />
     <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\libzmq\include\zmq.h" />
     <ClInclude Include="dataOneSample.h" />
+    <ClInclude Include="hardwareConfiguration.h" />
     <ClInclude Include="HitRunconnection.h" />
+    <ClInclude Include="ipc.h" />
     <ClInclude Include="motorControl.h" />
     <ClInclude Include="NIDAQmx.h" />
     <ClInclude Include="utilities.h" />
+    <ClInclude Include="zmq.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -94,6 +100,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)/$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.dll;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ZEROMQ_HOME)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -157,16 +164,16 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\Users\PXI_BBDL\Documents\GitHub\hitNrun\externalLibraries;C:\Users\PXI_BBDL\Documents\GitHub\hitNrun;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\PXI_BBDL\Documents\GitHub\hit-run-neuromorphic;C:\Users\PXI_BBDL\Documents\GitHub\hit-run-neuromorphic\externalLibraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;nidaqmx.lib;pthreadVC2.lib;pthreadVSE2.lib;okFrontPanelDLL.lib;pthreadVCE2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;C:\T5_BbdlSanger\UPC_R01_grant\source\glut\glut32.lib;C:\SDK\pthreads\lib\x86\pthreadVC2.lib;C:\Program Files\National Instruments\NI-DAQ\DAQmx ANSI C Dev\lib\msvc\NIDAQmx.lib;C:\SDK\AntTweakBar\lib\AntTweakBar.lib;C:\Program Files\Intel\Composer XE 2011 SP1\ipp\lib\ia32\ipps.lib;C:\Program Files\Lua\5.1\lib\lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;nidaqmx.lib;pthreadVC2.lib;pthreadVSE2.lib;okFrontPanelDLL.lib;pthreadVCE2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;C:\Program Files\ZeroMQ 4.0.4\lib\libzmq-v110-mt-4_0_4.lib;C:\T5_BbdlSanger\UPC_R01_grant\source\glut\glut32.lib;C:\SDK\pthreads\lib\x86\pthreadVC2.lib;C:\Program Files\National Instruments\NI-DAQ\DAQmx ANSI C Dev\lib\msvc\NIDAQmx.lib;C:\SDK\AntTweakBar\lib\AntTweakBar.lib;C:\Program Files\Intel\Composer XE 2011 SP1\ipp\lib\ia32\ipps.lib;C:\Program Files\Lua\5.1\lib\lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>C:\Users\PXI_BBDL\Documents\GitHub\hitNrun\externalLibraries;$(ProgramFiles)\National Instruments\Shared\ExternalCompilerSupport\C\lib32\msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\PXI_BBDL\Documents\GitHub\hit-run-neuromorphic;$(ProgramFiles)\National Instruments\Shared\ExternalCompilerSupport\C\lib32\msvc;C:\Users\PXI_BBDL\Documents\GitHub\hit-run-neuromorphic\externalLibraries;$(ZEROMQ_HOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>

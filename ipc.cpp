@@ -17,17 +17,14 @@ void IPC::startServer(){
     socket.bind ("tcp://*:5555");
     while (true) {
       /*zmq::message_t request;
-
       // Wait for next request from client
       socket.recv (&request);
-
       //getting string type(json) from python and creating vector of integer
       //so it can get processed with c++
       //vector_data is private vector that can be accessed through hands code
       //vector_data is private and accessed by hand code
       isReceieved = true;
       vector_data = generateVector(std::string(static_cast<char*>(request.data()), request.size()));
-
       std::string outMessage = generateString(vector_data);
       testingData = outMessage;
       //Communication between IPC and hit and run starts from here
@@ -35,10 +32,8 @@ void IPC::startServer(){
       //getting the signal so it knows if csv file was updated.
       //eventually it sends string to Hit and Run and get the result from it.
       std::cout<<outMessage<<std::endl;
-
       Sleep(2000);
       //wait until getting the signal from hit and run with measured data
-
       
       //outMessage = std::to_string(toPython);
       std::ostringstream convert;
@@ -63,6 +58,12 @@ void IPC::startServer(){
       }
       isReceieved = true; //ipc gets data and makes it vector and HR gets it after that
       //this is where you have to wait until  so IPC can process and sending the data.
+      
+      
+      
+      
+      
+      
       std::string outMessage = "DONE";
       zmq::message_t reply (outMessage.size());
       const void * a = outMessage.c_str();
@@ -159,4 +160,6 @@ void IPC::clearVector_element() {
 std::vector<int> IPC::getVector_data() {
     return vector_data;
 }
-
+void IPC::false_isReceived() {
+    isReceieved = false;
+}

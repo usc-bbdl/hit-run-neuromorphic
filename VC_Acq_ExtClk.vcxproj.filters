@@ -16,21 +16,39 @@
     <ClCompile Include="HitRunconnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="hardwareConfiguration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ipc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utilities.h">
-      <Filter>Head Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dataOneSample.h">
-      <Filter>Head Files</Filter>
-    </ClInclude>
     <ClInclude Include="motorControl.h">
       <Filter>Head Files</Filter>
     </ClInclude>
     <ClInclude Include="NIDAQmx.h">
       <Filter>Head Files</Filter>
     </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Head Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dataOneSample.h">
+      <Filter>Head Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hardwareConfiguration.h">
+      <Filter>Head Files</Filter>
+    </ClInclude>
     <ClInclude Include="HitRunconnection.h">
+      <Filter>Head Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ipc.h">
+      <Filter>Head Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zmq.hpp">
+      <Filter>Head Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libzmq\include\zmq.h">
       <Filter>Head Files</Filter>
     </ClInclude>
   </ItemGroup>

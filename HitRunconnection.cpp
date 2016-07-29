@@ -10,7 +10,6 @@ HitRunconnection::HitRunconnection(motorControl *temp)
 {
 	motors = temp;
     live = FALSE;
-    
     //File IO
     char *header[200];
     dataFile = fopen("seven_muscles.csv","r");

@@ -17,4 +17,4 @@ clean:
 	rm -f $(OBJS) $(TARGET) core
 
 $(TARGET) : $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBFLAGS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBFLAGS) -lzmq -pthread

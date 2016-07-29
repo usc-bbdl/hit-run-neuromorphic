@@ -48,3 +48,5 @@ for it in range(1000):
 	else:
 		message = socket.recv()
 		print message
+	import time
+	time.sleep(1)
