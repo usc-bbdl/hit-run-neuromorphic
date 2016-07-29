@@ -1,18 +1,9 @@
 #include <iostream>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <vector>
-#include <string>
 #include <sstream>
-#include "IPC.h"
-#include "zmq.hpp"
+#include "ipc.h"
 #include <string>
-#include <iostream>
 #include <fstream>
 #ifndef _WIN32
 #include <unistd.h>
@@ -25,18 +16,15 @@ void IPC::startServer(){
 
     socket.bind ("tcp://*:5555");
     while (true) {
-      zmq::message_t request;
-
+      /*zmq::message_t request;
       // Wait for next request from client
       socket.recv (&request);
-
       //getting string type(json) from python and creating vector of integer
       //so it can get processed with c++
       //vector_data is private vector that can be accessed through hands code
       //vector_data is private and accessed by hand code
       isReceieved = true;
       vector_data = generateVector(std::string(static_cast<char*>(request.data()), request.size()));
-
       std::string outMessage = generateString(vector_data);
       testingData = outMessage;
       //Communication between IPC and hit and run starts from here
@@ -44,18 +32,46 @@ void IPC::startServer(){
       //getting the signal so it knows if csv file was updated.
       //eventually it sends string to Hit and Run and get the result from it.
       std::cout<<outMessage<<std::endl;
-      
-      sleep(1);
+      Sleep(2000);
       //wait until getting the signal from hit and run with measured data
-
-      outMessage = std::to_string(toPython);
-
+      
+      //outMessage = std::to_string(toPython);
+      std::ostringstream convert;
+      convert << toPython;
+      outMessage = convert.str();
+      Sleep(2000);
       // Send the string to python
       zmq::message_t reply (outMessage.size());
       const void * a = outMessage.c_str();
       memcpy (reply.data(), a, outMessage.size());
       socket.send(reply);
       isReceieved = false; // reset it false  
+      */
+
+
+      zmq::message_t request;
+      socket.recv (&request);
+      //IPC gets message from python and make it vector so that HR can process the data.
+      vector_data = generateVector(std::string(static_cast<char*>(request.data()), request.size()));
+      for(int i = 0; i < vector_data.size()-1; i++) {
+          vector_element.push_back(vector_data[i]);
+      }
+      isReceieved = true; //ipc gets data and makes it vector and HR gets it after that
+      //this is where you have to wait until  so IPC can process and sending the data.
+      
+      
+      
+      
+      
+      
+      std::string outMessage = "DONE";
+      zmq::message_t reply (outMessage.size());
+      const void * a = outMessage.c_str();
+      memcpy (reply.data(), a, outMessage.size());
+      Sleep(1000);
+      socket.send(reply);
+      isReceieved = false; // reset it false  
+
     }
 }
 /**
@@ -64,25 +80,7 @@ void IPC::startServer(){
   * that answer to establishConnection in HitRun.
   */ 
 bool IPC::isServerWorking(){
-  // running time measurement for recursive
-    clock_t Rstart, Rfinish;
-    double Rdur;
-
-    Rstart = clock();//start time
-   
-    //sending message
-    std::string heartbeat = "heartbeat";
-    zmq::message_t H_Message (heartbeat.size());
-    const void * a = heartbeat.c_str();
-    memcpy (H_Message.data(), a, heartbeat.size());
-    socket.send(H_Message);
-
-
-    Rfinish = clock();//ending time
-
-    Rdur = (double)(Rfinish - Rstart);
-    Rdur /= (CLOCKS_PER_SEC);
-    std::cout << "running time in recursive : " << Rdur << std::endl;
+    return true;
 }
 /**
   * wasDataReceived
@@ -110,6 +108,7 @@ std::vector<int> IPC::getData(){
 int IPC::sendData(int integerData){
   //when HIT AND RUN send the data
   toPython = integerData;
+  return toPython;
 }
 std::vector<int> IPC::generateVector(std::string python_data) {
 
@@ -125,7 +124,7 @@ std::vector<int> IPC::generateVector(std::string python_data) {
 std::string IPC::generateString(std::vector<int> vector_c) {
     
     std::stringstream ss;
-     for(int i = 0; i < vector_c.size(); i++) {
+     for(unsigned int i = 0; i < vector_c.size(); i++) {
        if(i != vector_c.size()-1){
            ss << vector_c[i] << ",";
        }else{
@@ -142,7 +141,7 @@ void IPC::generateCSV(std::string path, std::vector<int> new_data) {
 
       std::ofstream csv_file;
       csv_file.open (path);
-      for(int i = 0; i < new_data.size(); i++) {
+      for(unsigned int i = 0; i < new_data.size(); i++) {
         csv_file << new_data[i] << ",";
         if(i == (new_data.size()-1)) {
           csv_file << "\n";
@@ -150,4 +149,17 @@ void IPC::generateCSV(std::string path, std::vector<int> new_data) {
       }
 
       csv_file.close();
+}
+std::vector<int> IPC::getVector_element() {
+    return vector_element;
+}
+void IPC::clearVector_element() {
+    vector_element.clear();
+    vector_data.clear();
+}
+std::vector<int> IPC::getVector_data() {
+    return vector_data;
+}
+void IPC::false_isReceived() {
+    isReceieved = false;
 }
