@@ -5,7 +5,6 @@
 #include "ipc.h"
 #include <string>
 #include <fstream>
-
 #include <random>
 #include <windows.h>
 #include <conio.h>

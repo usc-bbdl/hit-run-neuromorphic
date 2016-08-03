@@ -1,25 +1,18 @@
 #pragma once
 #ifndef IPC_H_
 #define IPC_H_
-//#include "ipc.h"
-#include <pthread.h>
 #include <NIDAQmx.h>
 //include these for socket programming
 #include "zmq.hpp"
-#include <vector>
 #include "utilities.h"
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#define sleep(n)  Sleep(n)
-#endif
-
 
 class IPC {
 
 public:
 
-	IPC() : context(1), socket(context, ZMQ_REP) {}
+	IPC() : context(1), socket(context, ZMQ_REP) {
+        isReceieved = false;
+    }
 
 	void startServer();
 
@@ -53,5 +46,6 @@ public:
 	bool isReceieved;
 	std::string toPython;
     float64 vector_element[MUSCLE_NUM];
+
 };
 #endif

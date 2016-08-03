@@ -28,7 +28,6 @@
     <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\libzmq\include\zmq.h" />
     <ClInclude Include="dataOneSample.h" />
     <ClInclude Include="hardwareConfiguration.h" />
     <ClInclude Include="HitRunconnection.h" />

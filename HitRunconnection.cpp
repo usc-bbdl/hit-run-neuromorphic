@@ -2,10 +2,10 @@
 #include "utilities.h"
 #include <NIDAQmx.h>
 #include <random>
-#include <windows.h>
 #include <conio.h>
 #include <motorControl.h>
 #include <math.h>
+
 HitRunconnection::HitRunconnection(motorControl *temp)
 {
 	motors = temp;

@@ -5,28 +5,22 @@
 #include <fstream>
 #include <conio.h>
 #include <utilities.h>
-#include "zmq.hpp"
 #include <string>
-#include <pthread.h>
-#include "ipc.h"
-#include "header.h"
-#include <map>
 #include <stdlib.h>
 #include <string>
 #include <fstream>
-#include "utilities.h"
-#include <NIDAQmx.h>
 #include <random>
-#include <windows.h>
+#include "ipc.h"
+#include <pthread.h>
 #include <conio.h>
 #include <motorControl.h>
 #include <math.h>
+
 #ifndef _WIN32
 #else
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <Windows.h>
-
 #define sleep(n) Sleep(n)
 #endif
 
@@ -34,8 +28,6 @@
 IPC* test = new IPC();
 zmq::context_t context(1);
 zmq::socket_t socket_1(context, ZMQ_REP);
-std::map<int, std::vector<int> > record;
-
 
 using namespace std;
 void generateCSV(string data);

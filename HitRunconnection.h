@@ -2,8 +2,8 @@
 #define HIT_RUN_CONNECTION_H
 
 #include <motorControl.h>
-#include <windows.h>
 #include <process.h>
+
 class HitRunconnection
 {
     //for file io
