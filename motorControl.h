@@ -4,6 +4,7 @@
 #include <NIDAQmx.h>
 #include <utilities.h>
 #include <iostream>
+#include "ipc.h"
 #include <windows.h>
 #include <process.h>
 #include <ctime>

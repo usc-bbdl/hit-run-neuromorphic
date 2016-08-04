@@ -5,7 +5,7 @@
 #include <conio.h>
 #include <motorControl.h>
 #include <math.h>
-
+/*
 HitRunconnection::HitRunconnection(motorControl *temp)
 {
 	motors = temp;
@@ -26,6 +26,7 @@ HitRunconnection::HitRunconnection(motorControl *temp)
     bias = 2;
 
 }
+*/
 HitRunconnection::~HitRunconnection() {
 	live = FALSE;
 }
@@ -92,7 +93,7 @@ float64 * HitRunconnection::getVector() {
 //	for (int i = 0; i<MUSCLE_NUM;i++, t++){
 //		motorReference[i] = 4*(1+cos(2*3.14*0.02*t));
 //	}
-    
+    /*
     if (trialIndex < numTrials){
         //fscanf(dataFile,"%f,%f,%f,%f,%f,%f,%f\n", &motorReference[0], &motorReference[1], &motorReference[2], &motorReference[3], &motorReference[4], &motorReference[5], &motorReference[6]);
         fscanf(dataFile,"%f,%f,%f,%f,%f,%f,%f\n", &ref1, &ref2, &ref3, &ref4, &ref5, &ref6, &ref7);
@@ -112,6 +113,32 @@ float64 * HitRunconnection::getVector() {
     
 
     return motorReference;
+    */
+    
+        //getting the signal from HR
+        //so it can process the work
+        bool flag = true;
+        do {
+            if(test->wasDataReceived()) {
+                Sleep(1100);
+
+                std::string csv_Input = test->generateString(test->getVector_data());
+    
+                test->clearVector_element(); // clear the vector so HR does not get duplicate data.
+
+                float64 temp[6];
+                test->sendData(temp);//pass in vector of float64, it actually send that vector
+                test->false_isReceived();
+                flag = false;
+                for (int i=0;i<6;i++){
+                    motorReference[i] = temp[i];
+                }
+            }
+        }
+        while(flag);
+        motorReference[6] = 0;
+
+    
     //END PLACE HOLDER
     //----------------
 
@@ -123,4 +150,23 @@ int HitRunconnection::sendVector() {
     //need to send back forceOut array using API
 
 	return 1;
+}
+void *HitRunconnection::runServer(void*) {
+
+    std::cout<<"run server starts\n"<<std::endl;
+    test->startServer();
+
+   pthread_exit(NULL);
+   return NULL;
+}
+void HitRunconnection::startThread(void) {
+        //typedef void* (HitRunconnection::*HRptr)(void);
+        //typedef void* (*Pthreadptr)(void*);
+
+        HRptr hr = &HitRunconnection::runServer;
+        Pthreadptr p = *(Pthreadptr*)&hr;
+        pthread_t tid;
+        if (pthread_create(&tid, 0, p, this) == 0)
+            pthread_detach(tid);
+        
 }

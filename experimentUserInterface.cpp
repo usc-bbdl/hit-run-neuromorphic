@@ -10,12 +10,11 @@
 #include <string>
 #include <fstream>
 #include <random>
-#include "ipc.h"
 #include <pthread.h>
 #include <conio.h>
 #include <motorControl.h>
 #include <math.h>
-
+/*
 #ifndef _WIN32
 #else
 #include <winsock2.h>
@@ -23,7 +22,7 @@
 #include <Windows.h>
 #define sleep(n) Sleep(n)
 #endif
-
+*/
 #define NUM_THREADS 2
 IPC* test = new IPC();
 zmq::context_t context(1);
@@ -58,43 +57,9 @@ void *test_1(void*) {
     pthread_exit(NULL);
 }
 
-void *runServer(void*) {
-
-    cout<<"run server starts\n"<<endl;
-    test->startServer();
-
-   pthread_exit(NULL);
-   return NULL;
-}
-
-void generateCSV(string data) {
-     ofstream myfile ("data.csv", ios_base::app);
-     if(myfile.is_open()) {
-           std::cout<<data<<std::endl;
-           myfile << data << endl;
-           myfile.close();
-    }
-}
-
-
-
-
 int main()
 {
-    //InitializeConditionVariable(&Condition_Python);
-    //InitializeConditionVariable(&Condition_HR);
-    //InitializeCriticalSection(&bufferLock);
-
-    int i, j;
-    pthread_t thread_1, thread_2;
-    pthread_create(&thread_1, NULL, test_1, NULL);
-    pthread_create(&thread_2, NULL, runServer, NULL);
-    pthread_join(thread_1, (void **)&i); //thread 1 : Rest of the code
-    pthread_join(thread_2, (void **)&j); //thread 2 : IPC
-
-
-
-    /*
+    
     printf("Press Spc to move forward\n\n");
     printf("Press Esc to terminate\n");
     printf("Initialization; Next stage is Motors Winding up\n");
@@ -118,7 +83,7 @@ int main()
            }
         }
     }
-    */
+    
    delete test;
    return 0;
 }

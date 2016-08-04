@@ -6,7 +6,6 @@
 #include <string>
 #include <fstream>
 #include <random>
-#include <windows.h>
 #include <conio.h>
 #include <motorControl.h>
 #include <math.h>
@@ -30,7 +29,6 @@ void IPC::startServer(){
       isReceieved = true; //ipc gets data and makes it vector and HR gets it after that
       //this is where you have to wait until  so IPC can process and sending the data.
       
-
       //sending flag is good here.
       if(toPython == " ") {
           while(toPython == " ") {
@@ -45,8 +43,6 @@ void IPC::startServer(){
           isReceieved = false; // reset it false  
           toPython = " "; // initialize string to avoid duplicate data to python
       }
-
-
     }
 }
 /**

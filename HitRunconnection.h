@@ -3,6 +3,9 @@
 
 #include <motorControl.h>
 #include <process.h>
+#include <pthread.h>
+
+
 
 class HitRunconnection
 {
@@ -20,14 +23,46 @@ class HitRunconnection
     static void HitRunconnectionControlLoop(void*);
     void controlLoop();
     void update();
+    IPC * test;
+    zmq::context_t context;
+    zmq::socket_t socket_1;
+    typedef void* (HitRunconnection::*HRptr)(void);
+    typedef void* (*Pthreadptr)(void*);
+
 public:
-    HitRunconnection(motorControl*);
+        HitRunconnection(motorControl* temp): context(1), socket_1(context, ZMQ_REP){
+        	motors = temp;
+            live = FALSE;
+            //File IO
+            char *header[200];
+            dataFile = fopen("seven_muscles.csv","r");
+            if (dataFile == NULL) 
+                printf("Could not open data file");
+            else{
+            fscanf(dataFile,"%s\n",&header);
+            fscanf(dataFile,"%d,%d\n",&numTrials);
+            }
+            trialIndex = 0;
+            //end File IO
+
+            gain = 8;
+            bias = 2;
+
+            test = new IPC();
+            //int j;
+            //pthread_t thread_2;
+            //pthread_create(&thread_2, NULL, HitRunconnection::runServer, this);
+            //pthread_join(thread_2, (void **)&j); //thread 2 : IPC
+
+    };
     ~HitRunconnection(void);
     void startConnection();
     int establishConnection();
     float64 * getVector();
     int scaleVector();
     int sendVector();
-    
+    void *runServer(void*);
+    void startThread(void);
+
 };
 #endif

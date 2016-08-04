@@ -3,7 +3,7 @@
 
 #include <NIDAQmx.h>
 #include <stdio.h>
-#include <windows.h>
+//#include <windows.h>
 #include <iostream>
 #include <utilities.h>
 #include "hardwareConfiguration.h"
