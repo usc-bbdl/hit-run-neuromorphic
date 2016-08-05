@@ -21,6 +21,7 @@ public:
     double getCurrentTime(void);
 };
 
+
 class motorControl
 {
     TaskHandle  motorTaskHandle, motorEnableHandle,loadCelltaskHandle;
@@ -47,4 +48,3 @@ public:
 };
 
 #endif
-

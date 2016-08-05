@@ -17,7 +17,7 @@
 #define sleep(n)  Sleep(n)
 #endif
 
-void IPC::startServer(){
+void * IPC::startServer(){
 
     socket.bind ("tcp://*:5555");
     while (true) {

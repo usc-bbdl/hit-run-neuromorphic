@@ -28,7 +28,7 @@ for it in range(1000):
 		row.append(IDNumber)
 		numJson = json.dumps(row)
 		hello.sendMessage(numJson)
-		print "waht we are sending"
+		print "what we are sending"
 		print row
 		print "-------"
 		del row [6]

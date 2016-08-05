@@ -126,11 +126,11 @@ float64 * HitRunconnection::getVector() {
     
                 test->clearVector_element(); // clear the vector so HR does not get duplicate data.
 
-                float64 temp[6];
+                float64 temp[7];
                 test->sendData(temp);//pass in vector of float64, it actually send that vector
                 test->false_isReceived();
                 flag = false;
-                for (int i=0;i<6;i++){
+                for (int i=0;i<7;i++){
                     motorReference[i] = temp[i];
                 }
             }
@@ -158,15 +158,4 @@ void *HitRunconnection::runServer(void*) {
 
    pthread_exit(NULL);
    return NULL;
-}
-void HitRunconnection::startThread(void) {
-        //typedef void* (HitRunconnection::*HRptr)(void);
-        //typedef void* (*Pthreadptr)(void*);
-
-        HRptr hr = &HitRunconnection::runServer;
-        Pthreadptr p = *(Pthreadptr*)&hr;
-        pthread_t tid;
-        if (pthread_create(&tid, 0, p, this) == 0)
-            pthread_detach(tid);
-        
 }

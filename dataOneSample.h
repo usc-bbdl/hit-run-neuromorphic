@@ -6,15 +6,12 @@
 //#include <windows.h>
 #include <iostream>
 #include <utilities.h>
-#include "hardwareConfiguration.h"
+
 class dataOneSample
 {
-    hardwareConfiguration *hardware;
     TaskHandle loadCelltaskHandle;
 public:
-    int readOffset();
-    dataOneSample(hardwareConfiguration*);
-    //~dataOneSample(void);
+    dataOneSample();
     double loadCellOffset[MUSCLE_NUM+6];
 };
 #endif

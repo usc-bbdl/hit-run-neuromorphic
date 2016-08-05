@@ -14,7 +14,7 @@ public:
         isReceieved = false;
     }
 
-	void startServer();
+	void *startServer();
 
     bool isServerWorking();
 
@@ -35,7 +35,14 @@ public:
     void clearVector_element();
 
     float64 * getVector_data();
+
     void false_isReceived();
+
+    static void *StartServer_helper(void * context){
+
+        return ((IPC *)context)->startServer();
+
+    }
 
     private:
 	zmq::context_t context;
@@ -46,6 +53,7 @@ public:
 	bool isReceieved;
 	std::string toPython;
     float64 vector_element[MUSCLE_NUM];
+    
 
 };
 #endif

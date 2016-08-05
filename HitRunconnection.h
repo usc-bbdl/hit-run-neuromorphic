@@ -5,8 +5,6 @@
 #include <process.h>
 #include <pthread.h>
 
-
-
 class HitRunconnection
 {
     //for file io
@@ -49,10 +47,10 @@ public:
             bias = 2;
 
             test = new IPC();
-            //int j;
-            //pthread_t thread_2;
-            //pthread_create(&thread_2, NULL, HitRunconnection::runServer, this);
-            //pthread_join(thread_2, (void **)&j); //thread 2 : IPC
+            int j;
+            pthread_t thread_2;
+            pthread_create(&thread_2, NULL, &IPC::StartServer_helper, &test);
+            pthread_join(thread_2, (void **)&j); //thread 2 : IPC
 
     };
     ~HitRunconnection(void);
@@ -62,7 +60,6 @@ public:
     int scaleVector();
     int sendVector();
     void *runServer(void*);
-    void startThread(void);
 
 };
 #endif
