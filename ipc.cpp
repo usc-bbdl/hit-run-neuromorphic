@@ -17,13 +17,15 @@
 #define sleep(n)  Sleep(n)
 #endif
 
-void * IPC::startServer(){
-
+void* IPC::startServer(){
+    std::cout<<"start server"<<std::endl;
     socket.bind ("tcp://*:5555");
     while (true) {
-
+        std::cout<<"in while"<<std::endl;
       zmq::message_t request;
+      
       socket.recv (&request);
+      std::cout<<"after request"<<std::endl;
       //IPC gets message from python and make it vector so that HR can process the data.
       generateVector(std::string(static_cast<char*>(request.data()), request.size()));
       isReceieved = true; //ipc gets data and makes it vector and HR gets it after that

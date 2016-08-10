@@ -6,10 +6,12 @@
 
 int proceedState(int *state)
 {
+    std::cout<<"in proceedState"<<std::endl;
     static dataOneSample loadCellOffsets;
     static motorControl motors(loadCellOffsets.loadCellOffset);
 	static HitRunconnection h_r_Con(& motors);
     static int connectionPass;
+    std::cout<<"before switch"<<std::endl;
     switch(*state)
     {
     case MOTOR_STATE_INIT:
@@ -41,6 +43,7 @@ int proceedState(int *state)
         break;
 	case MOTOR_STATE_RUN_EXPERIMENT:
         //Start controlling muscle force
+        std::cout<<"HEY11111111111111"<<std::endl;
         h_r_Con.startConnection();
         Sleep(1000);
         printf("Running the Experiment.\n");

@@ -5,48 +5,32 @@
 #include <conio.h>
 #include <motorControl.h>
 #include <math.h>
-/*
-HitRunconnection::HitRunconnection(motorControl *temp)
-{
-	motors = temp;
-    live = FALSE;
-    //File IO
-    char *header[200];
-    dataFile = fopen("seven_muscles.csv","r");
-    if (dataFile == NULL) 
-        printf("Could not open data file");
-    else{
-    fscanf(dataFile,"%s\n",&header);
-    fscanf(dataFile,"%d,%d\n",&numTrials);
-    }
-    trialIndex = 0;
-    //end File IO
-
-    gain = 8;
-    bias = 2;
-
-}
-*/
 HitRunconnection::~HitRunconnection() {
 	live = FALSE;
 }
-
 void HitRunconnection::startConnection()
 {
+    std::cout<<"startConnection"<<std::endl;
     live = TRUE;
     hIOMutex = CreateMutex(NULL, FALSE, NULL);
+
 	_beginthread(HitRunconnection::HitRunconnectionControlLoop,0,this);
 }
 
 void HitRunconnection::HitRunconnectionControlLoop(void* a)
 {
+    std::cout<<"HitRunConnection"<<std::endl;
+    
 	((HitRunconnection*)a)->controlLoop();
+
 }
 
+
 void HitRunconnection::controlLoop(void){
+    std::cout<<"controlLoop"<<std::endl;
     int key = 0;
     while (live)
-    {
+    {   std::cout<<"live"<<std::endl;
         if (kbhit()!=0){
             key = getch();
             if(key == 27) live = FALSE;
@@ -117,18 +101,21 @@ float64 * HitRunconnection::getVector() {
     
         //getting the signal from HR
         //so it can process the work
+        std::cout<<"flag"<<std::endl;
         bool flag = true;
         do {
-            if(test->wasDataReceived()) {
+        std::cout<<"flag1"<<std::endl;
+            if(test.wasDataReceived()) {
+                std::cout<<"flag3"<<std::endl;
                 Sleep(1100);
 
-                std::string csv_Input = test->generateString(test->getVector_data());
+                std::string csv_Input = test.generateString(test.getVector_data());
     
-                test->clearVector_element(); // clear the vector so HR does not get duplicate data.
+                test.clearVector_element(); // clear the vector so HR does not get duplicate data.
 
                 float64 temp[7];
-                test->sendData(temp);//pass in vector of float64, it actually send that vector
-                test->false_isReceived();
+                test.sendData(temp);//pass in vector of float64, it actually send that vector
+                test.false_isReceived();
                 flag = false;
                 for (int i=0;i<7;i++){
                     motorReference[i] = temp[i];
@@ -153,8 +140,8 @@ int HitRunconnection::sendVector() {
 }
 void *HitRunconnection::runServer(void*) {
 
-    std::cout<<"run server starts\n"<<std::endl;
-    test->startServer();
+   std::cout<<"run server starts\n"<<std::endl;
+   test.startServer();
 
    pthread_exit(NULL);
    return NULL;

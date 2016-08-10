@@ -21,11 +21,13 @@ class HitRunconnection
     static void HitRunconnectionControlLoop(void*);
     void controlLoop();
     void update();
-    IPC * test;
     zmq::context_t context;
     zmq::socket_t socket_1;
     typedef void* (HitRunconnection::*HRptr)(void);
     typedef void* (*Pthreadptr)(void*);
+    IPC test;
+
+
 
 public:
         HitRunconnection(motorControl* temp): context(1), socket_1(context, ZMQ_REP){
@@ -45,13 +47,12 @@ public:
 
             gain = 8;
             bias = 2;
-
-            test = new IPC();
+                        
             int j;
             pthread_t thread_2;
             pthread_create(&thread_2, NULL, &IPC::StartServer_helper, &test);
-            pthread_join(thread_2, (void **)&j); //thread 2 : IPC
-
+            pthread_detach(thread_2); //thread 2 : IPC
+            std::cout<<"hey"<<std::endl;
     };
     ~HitRunconnection(void);
     void startConnection();

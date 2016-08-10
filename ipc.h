@@ -37,13 +37,13 @@ public:
     float64 * getVector_data();
 
     void false_isReceived();
-
+    
     static void *StartServer_helper(void * context){
-
+        std::cout<<"in helper"<<std::endl;
         return ((IPC *)context)->startServer();
 
     }
-
+    
     private:
 	zmq::context_t context;
 	zmq::socket_t socket;
