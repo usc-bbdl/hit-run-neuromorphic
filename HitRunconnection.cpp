@@ -104,22 +104,22 @@ float64 * HitRunconnection::getVector() {
         std::cout<<"flag"<<std::endl;
         bool flag = true;
         do {
-        std::cout<<"flag1"<<std::endl;
             if(test.wasDataReceived()) {
-                std::cout<<"flag3"<<std::endl;
                 Sleep(1100);
 
                 std::string csv_Input = test.generateString(test.getVector_data());
-    
+                std::cout<<csv_Input<<std::endl;
                 test.clearVector_element(); // clear the vector so HR does not get duplicate data.
 
                 float64 temp[7];
+
+                for (int i=0;i<7;i++){
+                    temp[i] = 0.0;
+                    motorReference[i] = temp[i];
+                }
                 test.sendData(temp);//pass in vector of float64, it actually send that vector
                 test.false_isReceived();
                 flag = false;
-                for (int i=0;i<7;i++){
-                    motorReference[i] = temp[i];
-                }
             }
         }
         while(flag);

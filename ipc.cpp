@@ -33,10 +33,13 @@ void* IPC::startServer(){
       
       //sending flag is good here.
       if(toPython == " ") {
+          std::cout<<"in TOPYTHON : " ""<<std::endl;
           while(toPython == " ") {
-          
+                
           }
-      }else {
+      }
+      
+          std::cout<<"ready to reply : "<<toPython<<std::endl;
           zmq::message_t reply (toPython.size());
           const void * a = toPython.c_str();
           memcpy (reply.data(), a, toPython.size());
@@ -44,7 +47,7 @@ void* IPC::startServer(){
           socket.send(reply);
           isReceieved = false; // reset it false  
           toPython = " "; // initialize string to avoid duplicate data to python
-      }
+      
     }
 }
 /**
@@ -93,7 +96,7 @@ std::string IPC::sendData(float64 data_to_python[MUSCLE_NUM]){
     std::string outMessage;
     ss >> outMessage;
     toPython = outMessage;
-
+    std::cout<<"to Python : "<<toPython<<std::endl;
     return outMessage;
 
 }

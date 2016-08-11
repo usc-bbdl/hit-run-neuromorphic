@@ -12,6 +12,7 @@ public:
 
 	IPC() : context(1), socket(context, ZMQ_REP) {
         isReceieved = false;
+        toPython = " ";
     }
 
 	void *startServer();
