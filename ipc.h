@@ -13,7 +13,7 @@ class IPC {
 public:
 
 	IPC() : context(1), socket(context, ZMQ_REP) {
-        isReceieved = false;
+        isReceived = false;
         toPython = " ";
     }
 	void *startServer();
@@ -50,10 +50,8 @@ public:
 	zmq::message_t request;
 	float64 vector_data[MUSCLE_NUM]; //this is vector data file that is sent to hand c++ so it can process it.
 	std::vector<int> csv_vector; //it can be used in order to generate csv file.
-	bool isReceieved;
+	bool isReceived;
 	std::string toPython;
     float64 vector_element[MUSCLE_NUM];
-    //static pthread_mutex_t IPC::lock = PTHREAD_MUTEX_INITIALIZER;
-    //static pthread_cond_t IPC::cond = PTHREAD_COND_INITIALIZER;
 };
 #endif

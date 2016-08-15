@@ -108,7 +108,6 @@ float64 * HitRunconnection::getVector() {
         }
     }
     while(flag);
-
     return motorReference;
 }
 

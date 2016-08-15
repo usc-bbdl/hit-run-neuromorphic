@@ -26,28 +26,21 @@ void* IPC::startServer(){
       socket.recv (&request);
       //IPC gets message from python and make it vector so that HR can process the data.
       generateVector(std::string(static_cast<char*>(request.data()), request.size()));
-      isReceieved = true; //ipc gets data and makes it vector and HR gets it after that
+      isReceived = true; //ipc gets data and makes it vector and HR gets it after that
+
       //this is where you have to wait until  so IPC can process and sending the data.
       
-      //sending flag is good here.
-      /*
-      if(toPython == " ") {
-          while(toPython == " ") {
-                
-          }
-      }
-      */
-      //pthread_mutex_lock(&lock);
-      //pthread_cond_wait(&cond, &lock);
+      pthread_mutex_lock(&lock);
+      pthread_cond_wait(&cond, &lock); // wait for HR sending vector for Python
       zmq::message_t reply (toPython.size());
       const void * a = toPython.c_str();
       memcpy (reply.data(), a, toPython.size());
       Sleep(1000);
       socket.send(reply);
-      isReceieved = false; // reset it false  
+      isReceived = false; // reset it false  
       toPython = " "; // initialize string to avoid duplicate data to python
       
-      //pthread_mutex_unlock(&lock);
+      pthread_mutex_unlock(&lock);
     }
 }
 /**
@@ -63,7 +56,7 @@ bool IPC::isServerWorking(){
   * Return true if we have received our data from the Python server.
   */
 bool IPC::wasDataReceived(){
-    return isReceieved;
+    return isReceived;
 }
 /**
   * getData
@@ -84,7 +77,7 @@ float64 * IPC::getData(){
 std::string IPC::sendData(float64 data_to_python[MUSCLE_NUM]){
   //when HIT AND RUN send the data
     //formulate string form to send data through socket
-    //pthread_mutex_lock(&lock);
+    pthread_mutex_lock(&lock);
 
     std::stringstream ss;
     for(int i = 0; i < MUSCLE_NUM; i++) {
@@ -98,10 +91,9 @@ std::string IPC::sendData(float64 data_to_python[MUSCLE_NUM]){
     std::string outMessage;
     ss >> outMessage;
     toPython = outMessage;
+    pthread_cond_signal(&cond);
+    pthread_mutex_unlock(&lock);
     return outMessage;
-    //pthread_cond_signal(&cond);
-    //pthread_mutex_lock(&lock);
-
 }
 float64 * IPC::generateVector(std::string python_data) {
     
@@ -133,10 +125,8 @@ std::string IPC::generateString(float64 vector_c[MUSCLE_NUM]) {
            ss << vector_c[i];
        }
      }
-     // Do some 'work'
      std::string outMessage;
      ss >> outMessage;
-
      return outMessage;
 }
 float64 * IPC::getVector_element() {
@@ -151,5 +141,5 @@ float64 * IPC::getVector_data() {
     return vector_data;
 }
 void IPC::false_isReceived() {
-    isReceieved = false;
+    isReceived = false;
 }

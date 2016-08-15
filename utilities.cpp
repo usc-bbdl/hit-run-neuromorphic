@@ -6,7 +6,6 @@
 
 int proceedState(int *state)
 {
-    std::cout<<"1"<<std::endl;
     static dataOneSample loadCellOffsets;
     static motorControl motors(loadCellOffsets.loadCellOffset);
 	static HitRunconnection h_r_Con(& motors);

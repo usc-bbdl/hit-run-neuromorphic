@@ -3,6 +3,8 @@
 #define UTILITIES_H
 #include <math.h>
 #include <NIDAQmx.h>
+#include <pthread.h>
+#include <stdio.h>
 //#include <kinematic\KinematicPerturbation.h>
 
 #define DAQmxErrChk(functionCall) if( DAQmxFailed(error=(functionCall)) ) goto Error; else
@@ -12,6 +14,10 @@ const int motorMinVoltage = 0;
 const int motorMaxVoltage = 5;
 const int loadCellMinVoltage = -10;
 const int loadCellMaxVoltage = +10;
+static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+static pthread_mutex_t lock_h = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t cond_h = PTHREAD_COND_INITIALIZER;
 
 #define     MOTOR_STATE_INIT 0
 #define     MOTOR_STATE_WINDING_UP 1
