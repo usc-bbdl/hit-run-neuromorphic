@@ -9,7 +9,7 @@
 const int controlFreq = 100;
 const double loadCellScale[13] = {(1/sqrt(2.0)) * 50.53,(1/sqrt(2.0)) * 50.53,(1/sqrt(2.0)) * 50.53,(1/sqrt(2.0)) * 50.53,(1/sqrt(2.0)) * 50.53,(1/sqrt(2.0)) * 50.53,(1/sqrt(2.0)) * 50.53, 1, 1 , 1 , 1, 1, 1}; //From calibration test with weights
 const int motorMinVoltage = 0;
-const int motorMaxVoltage = 7;
+const int motorMaxVoltage = 5;
 const int loadCellMinVoltage = -10;
 const int loadCellMaxVoltage = +10;
 

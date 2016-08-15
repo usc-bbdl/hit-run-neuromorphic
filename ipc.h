@@ -5,6 +5,8 @@
 //include these for socket programming
 #include "zmq.hpp"
 #include "utilities.h"
+#include <pthread.h>
+#include <stdio.h>
 
 class IPC {
 
@@ -14,7 +16,6 @@ public:
         isReceieved = false;
         toPython = " ";
     }
-
 	void *startServer();
 
     bool isServerWorking();
@@ -22,7 +23,7 @@ public:
     bool wasDataReceived();
 
     float64 * getData(); // should the return type of this be vector instead or does
-                    // the vectorization of the data happen in the HitRun class
+                         // the vectorization of the data happen in the HitRun class
     std::string sendData(float64 data_to_python[MUSCLE_NUM]);
 	
 	float64 * generateVector(std::string python_data);
@@ -40,11 +41,9 @@ public:
     void false_isReceived();
     
     static void *StartServer_helper(void * context){
-        std::cout<<"in helper"<<std::endl;
         return ((IPC *)context)->startServer();
-
     }
-    
+ 
     private:
 	zmq::context_t context;
 	zmq::socket_t socket;
@@ -54,7 +53,7 @@ public:
 	bool isReceieved;
 	std::string toPython;
     float64 vector_element[MUSCLE_NUM];
-    
-
+    //static pthread_mutex_t IPC::lock = PTHREAD_MUTEX_INITIALIZER;
+    //static pthread_cond_t IPC::cond = PTHREAD_COND_INITIALIZER;
 };
 #endif

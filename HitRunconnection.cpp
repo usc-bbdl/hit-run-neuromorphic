@@ -5,32 +5,27 @@
 #include <conio.h>
 #include <motorControl.h>
 #include <math.h>
+
 HitRunconnection::~HitRunconnection() {
 	live = FALSE;
 }
 void HitRunconnection::startConnection()
 {
-    std::cout<<"startConnection"<<std::endl;
     live = TRUE;
     hIOMutex = CreateMutex(NULL, FALSE, NULL);
-
 	_beginthread(HitRunconnection::HitRunconnectionControlLoop,0,this);
 }
 
 void HitRunconnection::HitRunconnectionControlLoop(void* a)
 {
-    std::cout<<"HitRunConnection"<<std::endl;
-    
 	((HitRunconnection*)a)->controlLoop();
-
 }
 
 
 void HitRunconnection::controlLoop(void){
-    std::cout<<"controlLoop"<<std::endl;
     int key = 0;
     while (live)
-    {   std::cout<<"live"<<std::endl;
+    { 
         if (kbhit()!=0){
             key = getch();
             if(key == 27) live = FALSE;
@@ -48,21 +43,21 @@ int HitRunconnection::scaleVector() {
     return 1;
 }
 void HitRunconnection::update() { //This is the function called in the thread
-	float64 *loadCellData;
+	
+    float64 *loadCellData;
 	loadCellData = motors->loadCellData;
     getVector();
-    //scaleVector();
+    scaleVector();
     motors->updateMotorRef(motorReference);
 	motors->newCommand = 1;
     sendVector();
 	Sleep(1000);
-    
+
 }
 int HitRunconnection::establishConnection() {
 	//Check if we can establish a connection to Hit&Run (BRIAN)
 	//return 0 if fail
 	//return 1 if successful
-
     return 1;
 }
 
@@ -94,40 +89,25 @@ float64 * HitRunconnection::getVector() {
         live = FALSE;
         printf("Experiment complete. Press space to shutdown\n");
     }
-    
-
     return motorReference;
     */
     
-        //getting the signal from HR
-        //so it can process the work
-        std::cout<<"flag"<<std::endl;
-        bool flag = true;
-        do {
-            if(test.wasDataReceived()) {
-                Sleep(1100);
+    //getting the signal from HR
+    //so it can process the work
+    bool flag = true;
+    do {
+        if(ipc_connection.wasDataReceived()) {
+            Sleep(1100);
 
-                std::string csv_Input = test.generateString(test.getVector_data());
-                std::cout<<csv_Input<<std::endl;
-                test.clearVector_element(); // clear the vector so HR does not get duplicate data.
-
-                float64 temp[7];
-
-                for (int i=0;i<7;i++){
-                    temp[i] = 0.0;
-                    motorReference[i] = temp[i];
-                }
-                test.sendData(temp);//pass in vector of float64, it actually send that vector
-                test.false_isReceived();
-                flag = false;
+            std::string csv_Input = ipc_connection.generateString(ipc_connection.getVector_data());
+            for(int i = 0; i < MUSCLE_NUM; i++){
+                 motorReference[i] = ipc_connection.getVector_data()[i];
             }
-        }
-        while(flag);
-        motorReference[6] = 0;
 
-    
-    //END PLACE HOLDER
-    //----------------
+            flag = false;
+        }
+    }
+    while(flag);
 
     return motorReference;
 }
@@ -135,14 +115,14 @@ float64 * HitRunconnection::getVector() {
 int HitRunconnection::sendVector() {
 	//send vector to BRIAN
     //need to send back forceOut array using API
-
-	return 1;
+    ipc_connection.clearVector_element(); // clear the vector so HR does not get duplicate data.
+    ipc_connection.sendData(motorReference);//pass in vector of float64, it actually send that vector
+    ipc_connection.false_isReceived();
+	
+    return 1;
 }
 void *HitRunconnection::runServer(void*) {
-
-   std::cout<<"run server starts\n"<<std::endl;
-   test.startServer();
-
+   ipc_connection.startServer();
    pthread_exit(NULL);
    return NULL;
 }

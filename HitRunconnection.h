@@ -25,34 +25,30 @@ class HitRunconnection
     zmq::socket_t socket_1;
     typedef void* (HitRunconnection::*HRptr)(void);
     typedef void* (*Pthreadptr)(void*);
-    IPC test;
-
-
+    IPC ipc_connection;
 
 public:
-        HitRunconnection(motorControl* temp): context(1), socket_1(context, ZMQ_REP){
-        	motors = temp;
-            live = FALSE;
-            //File IO
-            char *header[200];
-            dataFile = fopen("seven_muscles.csv","r");
-            if (dataFile == NULL) 
-                printf("Could not open data file");
-            else{
-            fscanf(dataFile,"%s\n",&header);
-            fscanf(dataFile,"%d,%d\n",&numTrials);
-            }
-            trialIndex = 0;
-            //end File IO
-
-            gain = 8;
-            bias = 2;
+    HitRunconnection(motorControl* temp): context(1), socket_1(context, ZMQ_REP){
+   	motors = temp;
+    live = FALSE;
+    //File IO
+    char *header[200];
+    dataFile = fopen("seven_muscles.csv","r");
+    if (dataFile == NULL) 
+        printf("Could not open data file");
+    else{
+        fscanf(dataFile,"%s\n",&header);
+        fscanf(dataFile,"%d,%d\n",&numTrials);
+    }
+    trialIndex = 0;
+    //end File IO
+    gain = 1;
+    bias = 2;
                         
-            int j;
-            pthread_t thread_2;
-            pthread_create(&thread_2, NULL, &IPC::StartServer_helper, &test);
-            pthread_detach(thread_2); //thread 2 : IPC
-            std::cout<<"hey"<<std::endl;
+    int j;
+    pthread_t thread_2;
+    pthread_create(&thread_2, NULL, &IPC::StartServer_helper, &ipc_connection);
+    pthread_detach(thread_2); //thread 2 : IPC
     };
     ~HitRunconnection(void);
     void startConnection();
@@ -61,6 +57,5 @@ public:
     int scaleVector();
     int sendVector();
     void *runServer(void*);
-
 };
 #endif

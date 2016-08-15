@@ -18,36 +18,36 @@
 #endif
 
 void* IPC::startServer(){
-    std::cout<<"start server"<<std::endl;
+    std::cout<<"IPC starts running"<<std::endl;
     socket.bind ("tcp://*:5555");
     while (true) {
-        std::cout<<"in while"<<std::endl;
       zmq::message_t request;
       
       socket.recv (&request);
-      std::cout<<"after request"<<std::endl;
       //IPC gets message from python and make it vector so that HR can process the data.
       generateVector(std::string(static_cast<char*>(request.data()), request.size()));
       isReceieved = true; //ipc gets data and makes it vector and HR gets it after that
       //this is where you have to wait until  so IPC can process and sending the data.
       
       //sending flag is good here.
+      /*
       if(toPython == " ") {
-          std::cout<<"in TOPYTHON : " ""<<std::endl;
           while(toPython == " ") {
                 
           }
       }
+      */
+      //pthread_mutex_lock(&lock);
+      //pthread_cond_wait(&cond, &lock);
+      zmq::message_t reply (toPython.size());
+      const void * a = toPython.c_str();
+      memcpy (reply.data(), a, toPython.size());
+      Sleep(1000);
+      socket.send(reply);
+      isReceieved = false; // reset it false  
+      toPython = " "; // initialize string to avoid duplicate data to python
       
-          std::cout<<"ready to reply : "<<toPython<<std::endl;
-          zmq::message_t reply (toPython.size());
-          const void * a = toPython.c_str();
-          memcpy (reply.data(), a, toPython.size());
-          Sleep(1000);
-          socket.send(reply);
-          isReceieved = false; // reset it false  
-          toPython = " "; // initialize string to avoid duplicate data to python
-      
+      //pthread_mutex_unlock(&lock);
     }
 }
 /**
@@ -84,6 +84,8 @@ float64 * IPC::getData(){
 std::string IPC::sendData(float64 data_to_python[MUSCLE_NUM]){
   //when HIT AND RUN send the data
     //formulate string form to send data through socket
+    //pthread_mutex_lock(&lock);
+
     std::stringstream ss;
     for(int i = 0; i < MUSCLE_NUM; i++) {
        if(i != MUSCLE_NUM-1){
@@ -96,18 +98,28 @@ std::string IPC::sendData(float64 data_to_python[MUSCLE_NUM]){
     std::string outMessage;
     ss >> outMessage;
     toPython = outMessage;
-    std::cout<<"to Python : "<<toPython<<std::endl;
     return outMessage;
+    //pthread_cond_signal(&cond);
+    //pthread_mutex_lock(&lock);
 
 }
 float64 * IPC::generateVector(std::string python_data) {
     
     int index = 0;
+    std::stringstream ss;
+    std::string actualData;
     for(std::string::iterator it = python_data.begin(); it != python_data.end(); ++it) {
-        if(isdigit(*it)) {
-            vector_data[index] = (float)(*it - '0');
-            index++;
+        if(*it != '[' && *it !=']') {
+            ss<<*it;
         }
+    }
+    actualData = ss.str();
+
+    std::istringstream ssi(actualData);
+    std::string token;
+    while(std::getline(ssi, token, ',')) {
+        vector_data[index] = std::stof(token);
+        index++;
     }
     return vector_data;
 }
@@ -134,7 +146,6 @@ void IPC::clearVector_element() {
     for(int i = 0; i < MUSCLE_NUM; i++) {
         vector_data[i] = 0.0;
     }
-
 }
 float64 * IPC::getVector_data() {
     return vector_data;

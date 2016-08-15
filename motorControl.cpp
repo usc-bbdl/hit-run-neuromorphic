@@ -211,7 +211,7 @@ void motorControl::controlLoop(void)
         loadCellData[11] = (loadCellData[11] * loadCellScale[11]) - loadCellOffset[11];
         loadCellData[12] = (loadCellData[12] * loadCellScale[12]) - loadCellOffset[12];
         //printf("Load Cell: %+6.2f; Force Command: %+6.2f \r",loadCellData[0],motorRef[0]);
-        printf("Fr Cmd1: %+6.2f, Fr Cmd2: %+6.2f, Fr Cmd3: %+6.2f \r",motorRef[0],motorRef[1],motorRef[2]);
+        printf("1:%+6.2f,2:%+6.2f,3: %+6.2f,4: %+6.2f,5: %+6.2f,6: %+6.2f,7: %+6.2f \r",motorRef[0],motorRef[1],motorRef[2],motorRef[3],motorRef[4],motorRef[5],motorRef[6]);
         ReleaseMutex( hIOMutex);
         sprintf(dataSample,"%.3f,%d",tock,newCommand);
 		for(int i = 0;i<MUSCLE_NUM;i++)
@@ -253,7 +253,7 @@ Error:
 void motorControl::updateMotorRef(float64 *a){
     for (int i =0;i<MUSCLE_NUM;i++)
     {
-        motorRef[i] = (8*a[i])+2;
+        motorRef[i] = (a[i]);
     }
 }
 

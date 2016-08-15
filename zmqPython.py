@@ -1,5 +1,7 @@
 import zmq
 
+float_vector = []
+
 class python_server(object):
 	context = zmq.Context()
 	socket = context.socket(zmq.REQ)
@@ -10,43 +12,54 @@ class python_server(object):
 	def sendMessage(self, message):
 		socket.send(message)
 	
+def string_to_float(message):
+	temp = message.split(',')
+	list_of_float = []
+	for x in temp:
+		try:
+			list_of_float.append(float(x))
+		except ValueError:
+			continue
+	return list_of_float
+
 context = zmq.Context()
 socket = context.socket(zmq.REQ)
 
 import json
-row = [1,2,3,4,5,6]
-row_json = json.dumps(row)
-print row_json
-incrementor = 0
-IDNumber = 0
+data1 = [0,0,0,0,0,0,0]
 
+index = 6
 for it in range(1000):
 	user_input = ""
 	if user_input == "":
 
 		hello = python_server(socket)
-		row.append(IDNumber)
-		numJson = json.dumps(row)
+	
+		numJson = json.dumps(data1)
 		hello.sendMessage(numJson)
 		print "what we are sending"
-		print row
-		print "-------"
-		del row [6]
-		IDNumber += 1
+		print data1
+		data1[index] = data1[index] + 1
+		for x in range(7):
+			if(data1[x] == 16):
+				data1[x] = 0
+				data1[x-1] = data1[x-1] + 1
+				for y in range(x,7):
+					data1[y] = 0
+				break
 
 		message = socket.recv()
+		print "What we got from c++"
 		print message
-		##dataVector = []
+		print "message in list form"
+		float_vector = string_to_float(message)
+		print float_vector
 
-		##dataVector = message.split(',')
-		##dataVector_1 = []
-		##for it in dataVector:
-		##	integer = int(it)
-		##	dataVector_1.append(integer)
-
-		##print dataVector_1
 	else:
 		message = socket.recv()
 		print message
 	import time
-	time.sleep(1)
+	time.sleep(0.5)
+
+#function that parse string to list of float number
+
