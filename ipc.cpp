@@ -30,7 +30,7 @@ void* IPC::startServer(){
 
       //this is where you have to wait until  so IPC can process and sending the data.
       
-      pthread_mutex_lock(&lock);
+      pthread_mutex_lock(&lock);       //Critical section starts
       pthread_cond_wait(&cond, &lock); // wait for HR sending vector for Python
       zmq::message_t reply (toPython.size());
       const void * a = toPython.c_str();
@@ -40,7 +40,7 @@ void* IPC::startServer(){
       isReceived = false; // reset it false  
       toPython = " "; // initialize string to avoid duplicate data to python
       
-      pthread_mutex_unlock(&lock);
+      pthread_mutex_unlock(&lock); // get out of critical section
     }
 }
 /**
@@ -80,7 +80,7 @@ std::string IPC::sendData(float64 data_to_python[MUSCLE_NUM]){
     pthread_mutex_lock(&lock);
 
     std::stringstream ss;
-    for(int i = 0; i < MUSCLE_NUM; i++) {
+    for(int i = 0; i < MUSCLE_NUM+6; i++) {
        if(i != MUSCLE_NUM-1){
            ss << data_to_python[i] << ",";
        }else{

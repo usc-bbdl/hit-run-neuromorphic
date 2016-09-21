@@ -16,6 +16,7 @@ class HitRunconnection
     motorControl *motors;
     HANDLE hIOMutex;
     float64 motorReference[MUSCLE_NUM];
+    float64 loadCellData[MUSCLE_NUM+6];
     float64 forceOut[MUSCLE_NUM+6];
     float gain, bias;
     static void HitRunconnectionControlLoop(void*);
@@ -29,7 +30,7 @@ class HitRunconnection
 
 public:
     HitRunconnection(motorControl* temp): context(1), socket_1(context, ZMQ_REP){
-   	motors = temp;
+    motors = temp;
     live = FALSE;
     //File IO
     char *header[200];
@@ -43,7 +44,7 @@ public:
     trialIndex = 0;
     //end File IO
     gain = 1;
-    bias = 2;
+    bias = 0;
                         
     int j;
     pthread_t thread_2;

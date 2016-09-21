@@ -44,8 +44,10 @@ int HitRunconnection::scaleVector() {
 }
 void HitRunconnection::update() { //This is the function called in the thread
 	
-    float64 *loadCellData;
-	loadCellData = motors->loadCellData;
+   // float64 *loadCellData;
+    for(int i = 0; i < MUSCLE_NUM+6; i++) {
+        loadCellData[i] = motors->loadCellData[i];
+    }
     getVector();
     scaleVector();
     motors->updateMotorRef(motorReference);
@@ -98,12 +100,11 @@ float64 * HitRunconnection::getVector() {
     do {
         if(ipc_connection.wasDataReceived()) {
             Sleep(1100);
-
+            //getting data from Python
             std::string csv_Input = ipc_connection.generateString(ipc_connection.getVector_data());
             for(int i = 0; i < MUSCLE_NUM; i++){
                  motorReference[i] = ipc_connection.getVector_data()[i];
             }
-
             flag = false;
         }
     }
@@ -115,7 +116,7 @@ int HitRunconnection::sendVector() {
 	//send vector to BRIAN
     //need to send back forceOut array using API
     ipc_connection.clearVector_element(); // clear the vector so HR does not get duplicate data.
-    ipc_connection.sendData(motorReference);//pass in vector of float64, it actually send that vector
+    ipc_connection.sendData(loadCellData);//pass in vector of float64, it actually send that vector
     ipc_connection.false_isReceived();
 	
     return 1;
