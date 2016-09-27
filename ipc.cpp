@@ -35,7 +35,7 @@ void* IPC::startServer(){
       zmq::message_t reply (toPython.size());
       const void * a = toPython.c_str();
       memcpy (reply.data(), a, toPython.size());
-      Sleep(1000);
+      //Sleep(1000);
       socket.send(reply);
       isReceived = false; // reset it false  
       toPython = " "; // initialize string to avoid duplicate data to python

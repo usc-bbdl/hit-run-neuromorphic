@@ -53,7 +53,7 @@ void HitRunconnection::update() { //This is the function called in the thread
     motors->updateMotorRef(motorReference);
 	motors->newCommand = 1;
     sendVector();
-	Sleep(1000);
+	Sleep(500);
 
 }
 int HitRunconnection::establishConnection() {
@@ -99,7 +99,7 @@ float64 * HitRunconnection::getVector() {
     bool flag = true;
     do {
         if(ipc_connection.wasDataReceived()) {
-            Sleep(1100);
+            Sleep(500);
             //getting data from Python
             std::string csv_Input = ipc_connection.generateString(ipc_connection.getVector_data());
             for(int i = 0; i < MUSCLE_NUM; i++){
