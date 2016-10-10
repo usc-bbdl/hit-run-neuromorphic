@@ -22,6 +22,9 @@
     <ClCompile Include="ipc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AdeptArmAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="motorControl.h">
@@ -46,6 +49,9 @@
       <Filter>Head Files</Filter>
     </ClInclude>
     <ClInclude Include="zmq.hpp">
+      <Filter>Head Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AdeptArmAPI.h">
       <Filter>Head Files</Filter>
     </ClInclude>
   </ItemGroup>

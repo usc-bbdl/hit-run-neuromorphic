@@ -1,5 +1,5 @@
 // experimentUserInterface.cpp : Defines the entry point for the console application.
-//
+/*
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -46,4 +46,4 @@ int main()
     }
     
    return 0;
-}
+}*/

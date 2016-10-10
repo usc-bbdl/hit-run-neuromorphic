@@ -258,7 +258,7 @@ bool AdeptArmAPI::disconnectFromServer () {
 
 // Main function to test the calls
 
-/*int main(int argc, char **argv) 
+int main(int argc, char **argv) 
 {
     AdeptArmAPI client;
     bool success = client.connectToController();
@@ -321,4 +321,4 @@ bool AdeptArmAPI::disconnectFromServer () {
     WSACleanup();
 
     return 0;
-}*/
+}
