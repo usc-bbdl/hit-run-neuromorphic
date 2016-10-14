@@ -77,16 +77,24 @@ float64 * IPC::getData(){
 std::string IPC::sendData(float64 data_to_python[MUSCLE_NUM]){
   //when HIT AND RUN send the data
     //formulate string form to send data through socket
+    //TODO: try to formulate json object
+    int counter = 1;
     pthread_mutex_lock(&lock);
 
     std::stringstream ss;
+    ss << "{";
+
     for(int i = 0; i < MUSCLE_NUM+6; i++) {
        if(i != MUSCLE_NUM-1){
            ss << data_to_python[i] << ",";
        }else{
+           ss << counter; 
+           ++counter;
            ss << data_to_python[i];
        }
     }
+
+    ss << "}";
 
     std::string outMessage;
     ss >> outMessage;

@@ -77,10 +77,12 @@ for it in range(2000):
 		print "message in list form"
 		float_vector = string_to_float(message)
 		print float_vector
+		#h = json.dumps(message)
+		#j = json.loads(h)
 
 	else:
 		message = socket.recv()
-		print message
+		#print message
 	import time
 	time.sleep(0.5)
 

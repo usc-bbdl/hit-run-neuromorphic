@@ -54,7 +54,6 @@ void HitRunconnection::update() { //This is the function called in the thread
 	motors->newCommand = 1;
     sendVector();
 	Sleep(500);
-
 }
 int HitRunconnection::establishConnection() {
 	//Check if we can establish a connection to Hit&Run (BRIAN)
